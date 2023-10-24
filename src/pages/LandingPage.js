@@ -3,46 +3,25 @@ import { RingLoader } from "react-spinners";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 import { useAuth0 } from "@auth0/auth0-react";
-import placeImage2 from "../assets/images/place-image2.jpg";
+//import placeImage2 from "../assets/images/place-image2.jpg";
 import Projects from "../components/Projects";
 import EditableImage from "../components/EditableImage";
 import InlineTextEdit from "../components/InlineTextEdit";
 import NavBarMobile from "../components/NavBarMobile";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css"; // Import the styles
 
 const LandingPage = () => {
   const [loading, setLoading] = useState(true);
   const { user, isAuthenticated } = useAuth0();
 
-  const [imageURL, setImageURL] = useState(`${placeImage2}`); // Default placeholder image URL
-
-  const [isEditing, setIsEditing] = useState(false);
-  const [inputText, setInputText] = useState(
-    "Feel free to get in touch with me. I am here to assist you with any inquiries you might have."
+  const [text, setText] = useState(
+    "Edit me e.g Feel free to get in touch with me. I am here to assist you with any inquiries you might have."
   );
-  const [savedText, setSavedText] = useState(""); // State to store the saved text
+  const [text2, setText2] = useState("Add name e.g John Doe");
+  const [text3, setText3] = useState("Add speciality e.g frontend developer");
 
-  const handleEditClick = () => {
-    setIsEditing(true);
-  };
-
-  const handleSaveClick = () => {
-    // Save the edited text
-    setSavedText(inputText);
-    setIsEditing(false);
-  };
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      setImageURL(reader.result);
-    };
-
-    if (file) {
-      reader.readAsDataURL(file);
-    }
-  };
+  const [editorHtml, setEditorHtml] = useState("");
 
   useEffect(() => {
     // Simulate loading images (e.g., fetch images from a server)
@@ -50,12 +29,6 @@ const LandingPage = () => {
       setLoading(false);
     }, 2000); // Adjust as needed
   }, []);
-
-  const [text, setText] = useState(
-    "Edit me e.g Feel free to get in touch with me. I am here to assist you with any inquiries you might have."
-  );
-  const [text2, setText2] = useState("Add name e.g John Doe");
-  const [text3, setText3] = useState("Add speciality e.g frontend developer");
 
   const handleSave = (editedText) => {
     setText(editedText);
@@ -65,6 +38,19 @@ const LandingPage = () => {
   };
   const handleSave3 = (editedText) => {
     setText3(editedText);
+  };
+
+  useEffect(() => {
+    const savedContent = localStorage.getItem("editorContent");
+    if (savedContent) {
+      setEditorHtml(savedContent);
+    }
+  }, []);
+
+  const handleEditorChange = (html) => {
+    setEditorHtml(html);
+    // Save content to local storage
+    localStorage.setItem("editorContent", html);
   };
 
   return (
@@ -118,6 +104,17 @@ const LandingPage = () => {
             </div>
           </div>
         )}
+        <section className="w-full h-auto flex justify-center items-center ">
+          <div className="container mx-auto p-4 bg-white w-[50%] h-full ">
+            <h1>Comments</h1>
+            <ReactQuill
+              value={editorHtml}
+              onChange={handleEditorChange}
+              theme="snow" // You can change the theme if you prefer a different style
+            />
+            {/* You can use editorHtml in your form submission or wherever you need the content */}
+          </div>
+        </section>
         <Projects />
         <Footer />
       </div>
