@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import LogoutButton from "./LogoutButton";
+import Profile from "./Profile";
 
 function NavBar({ onSearch }) {
   return (
@@ -16,7 +17,10 @@ function NavBar({ onSearch }) {
           Download CV{" "}
         </button>{" "}
       </div>{" "}
-      <div className="text-[12px] ml-[10px] lg:text-[14px] lg:ml-[0px] w-[20%] h-full flex justify-center items-center ">
+      <div className="text-[12px] ml-[10px] lg:text-[14px] lg:ml-[0px] w-[20%] p-[10px] h-full flex justify-between items-center ">
+        <div className="w-[50%] full flex justify-start items-center ">
+          <Profile />
+        </div>
         <LogoutButton />
       </div>{" "}
     </nav>
